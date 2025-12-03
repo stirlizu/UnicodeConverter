@@ -1,0 +1,268 @@
+<HTML>
+<HEAD>
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+
+<TITLE>UnicodeKyrillishConverter -- stirlizu©yahoo.de -- Stand:11.11.2025</TITLE></HEAD>
+<SCRIPT LANGUAGE="JavaScript">
+
+function F_CONVERTER()
+{
+  Ein = window.document.forms[0].elements[0].value;
+
+  sEin = Ein.toString();
+
+  var LEN = Ein . length;
+
+  var Aus = new Array( LEN ) ;
+
+
+  var a4l = new Array ( 'SCHY','schy' ,'SCH+','sch+'  ) ;
+  var a4r = new Array ( 'ШИ'  ,'ши'   ,'Щ'   ,'щ'     ) ;
+  
+
+  var a3l = new Array ( 'SCH', 'CSH' , 'J\'E' ,'zhy' , 'i\'\'' , 'e\'\'' ,'z^^' 
+                       ,'sch', 'csh' , 'j\'e' ,'ZHY' , 'I\'\'' , 'E\'\'' ,'Z^^' ) ;
+					   
+  var a3r = new Array ( 'Ш' ,  'Щ'   , 'ъ'    ,'жи'  , 'ї'     , 'є'     ,'ч'
+                       ,'ш' ,  'щ'   , 'Ъ'    ,'ЖИ'  , 'Ї'     , 'Є'     ,'Ч'   ) ;
+
+  var a2l = new Array ( 'JA','ja','Ja','JU','ju','Ju','JI','ji','E+','e+','CH','ch','CZ','cz','ZH','zh','e\'','E\'','JE','je', '\'\'' , '~~' ,'I\'' ,'i\''   ) ;
+  var a2r = new Array ( 'Я' ,'я' ,'я' ,'Ю' ,'ю' ,'ю' ,'Ы' ,'Ы' ,'Ё' ,'ё' ,'Ч' ,'ч' ,'Ч' ,'ч' ,'Ж' ,'ж' ,'э'  ,'Э'  ,'E' ,'е' , 'Ь'    , 'Ъ'  ,'I'   ,'i'       ) ;
+
+  var a1l = new Array ( 'A','B','W','G','D','E','Z','I','J','K','L','M','N','O','P','R','S','T','U','F','H','C','Y','Q'  ,'*' , 'V' 
+                       ,'a','b','w','g','d','e','z','i','j','k','l','m','n','o','p','r','s','t','u','f','h','c','y','\'' ,'~' , 'v' );
+
+  var a1r = new Array ( 'A','Б','В','Г','Д','E','З','И','Й','К','Л','M','Н','O','П','Р','С','Т','У','Ф','Х','Ц','Ы','Q'  ,'*' , 'В'
+                       ,'а','б','в','г','д','е','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х','ц','ы','ь'  ,'ъ' , 'в' );
+
+
+  // e'to = это 
+
+  var left = 0;
+  var ia = 0;
+  var de = 1;
+  var ch = '';
+  var ss = '';
+  
+  var sAus = '';   
+   
+  var ModusLatin = 0; // Für die Situation :   wot ssylka < ebay.de >  --->   вот ссылка < ебаы.де > 
+   
+  ///////////////////////////////////////////////////////////////
+  //  Schleife ber Eingabe-Fenster
+  ///////////////////////////////////////////////////////////////
+  for ( ie = 0 ; ie < LEN ; ie += de )
+  {   
+  
+	if ( ModusLatin == 0 )
+    {  
+    //////////////////////////////////////////////
+    //  4-Buchstaben-Kombinationen ersetzen
+    //////////////////////////////////////////////
+
+    de = 4 ;
+    sub = sEin.substring ( ie , ie + de ) ;
+    ss = '';
+
+    for ( ic = 0 ; ic < a4l . length ; ic ++ )
+    {
+     if ( sub == a4l [ ic ] )
+      {
+        ss = a4r [ ic ] ;
+        break;
+      }
+    }
+
+    if ( ss != '' )
+    {
+       sAus += ss ;
+       continue;
+    }
+
+
+    //////////////////////////////////////////////
+    //  3-Buchstaben-Kombinationen ersetzen
+    //////////////////////////////////////////////
+
+    de = 3 ;
+    sub = sEin.substring ( ie , ie + de ) ;
+    ss = '';
+
+    for ( ic = 0 ; ic < a3l . length ; ic ++ )
+    {
+     if ( sub == a3l [ ic ] )
+      {
+        ss = a3r [ ic ] ;
+        break;
+      }
+    }
+
+    if ( ss != '' )
+    {
+       sAus += ss ;
+       continue;
+    }
+
+    //////////////////////////////////////////////
+    //  2-Buchstaben-Kombinationen ersetzen
+    //////////////////////////////////////////////
+    de = 2;
+    sub = sEin.substring ( ie , ie + de ) ;
+    ss = '';
+
+    for ( ic = 0 ; ic < a2l . length ; ic ++ )
+    {
+     if ( sub == a2l [ ic ] )
+      {
+        ss = a2r [ ic ] ;
+        break;
+      }
+    }
+
+    if ( ss != '' )
+    {
+       sAus += ss ;
+       continue;
+    }
+
+	} ///////////////////// if ModusLatin == 0 //////////////////////////////////////////
+	
+    //////////////////////////////////////////////
+    //  1-Buchstabe ersetzen
+    //////////////////////////////////////////////
+    de = 1;
+    sub = sEin.substring ( ie , ie + de ) ;
+    ss = '';
+
+    for ( ic = 0 ; ic < a1l . length ; ic ++ )
+    {
+     if ( sub == a1l [ ic ] )
+      {
+        ss = a1r [ ic ] ;
+        break;
+      }
+    }
+
+	 
+	if ( ModusLatin == 0 && sub == '<' ) 
+	{
+	  ModusLatin = 1;
+	  sub = '"'
+	}
+	else if ( ModusLatin == 1 && sub == '>' ) 
+	{
+	  ModusLatin = 0;
+	  sub = '"'
+	}
+	else if ( ModusLatin == 1 )
+	  ss = '';
+	
+	 
+    //////////////////////////////////////////////
+    //  Schreiben in Ausgabe-Fenster
+    //////////////////////////////////////////////
+    sAus += ( ss != '' ? ss : sub ) ;
+
+
+  } ////////////////////  for //////////////////////////////
+
+ 
+  //window.document.forms[0].elements[1].value = sAus ;
+  window.document.forms[0].elements[2].value = sAus ;
+}
+
+
+</SCRIPT>
+
+<!-- KOMMENTAR  -->
+
+<!-- KOMMENTAR
+-->
+
+<BODY>
+
+<!-- 
+<H2 ALIGN="center"><FONT COLOR="black">Unicode Kyrillisch Converter</FONT></H2>
+-->
+
+<H3 
+  ALIGN="center"><FONT COLOR="black">Unicode Kyrillisch Converter</FONT>
+  <HR>
+</H3>
+
+<H5   
+  <P></P>                                                                                                                           
+  
+  <B>Ш</B>: SCH , <B>Щ</B>: SCH+ , <B>Ж</B>: ZH , <B>Ч</B>: CH / CZ / Z^^ 
+  
+  &nbsp; &nbsp; &nbsp; 
+  
+  E'TO WY MOZHETE = ЭТO ВЫ MOЖEТE
+    
+  &nbsp; &nbsp; &nbsp; 
+    
+  E'to Z^^to S~jel E+zhyk ? = Это Что Съел Ёжик ?        
+
+  &nbsp; &nbsp; &nbsp; 
+
+  <B>CZTO</B> e'to <B>TY</B> Mat' <B>Ezha</B> ? = <B>ЧTO</B> это <B>ТЫ</B> Mать <B>Eжa</B> ?
+
+  <P></P>
+
+  <FORM ENCTYPE="text/plain" NAME="Formular1">
+
+  <!-- KOMMENTAR
+  <textarea name="text_input" cols="64%" rows="14" >   </textarea>
+  -->
+  <textarea name="text_input" cols="74" rows="21" >   </textarea>
+
+  <INPUT TYPE="BUTTON" VALUE="  ПOЇХAЛИ ! " length="777" onclick="F_CONVERTER()">
+
+  <textarea name="text_output" cols="74" rows="21" >  </textarea>
+
+  <br>
+
+  <!-- /FORM  -->
+
+  </FORM>
+  
+  <P></P>
+  <P></P>
+
+<!-- KOMMENTAR
+<HR>
+-->
+
+moj krol' s~el chizha s borsch+om = мой кроль съел чижа с борщом
+<br>
+MOJ KROL'' S~~EL CHIZHA S BORSCH+OM = MOЙ КРOЛЬ СЪEЛ ЧИЖA С БOРЩOM
+
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
+PIONER , LJUBI RODINU , TWOJU MAT'' ! = ПИOНEР , ЛЮБИ РOДИНУ , ТВOЮ MAТЬ ! 
+
+
+<br><br>
+ezh po francuzki < hérisson >  = еж по французки < hérisson >
+<br>
+A WOT < ABELLE > OZNACHAET "PCHELA" = A ВOТ "ABELLE" OЗНAЧAEТ "ПЧEЛA"
+
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+ &nbsp;
+
+CHELOWEK - E'TO ZWUCHIT GORDO ! = ЧEЛOВEК - ЭТO ЗВУЧИТ ГOРДO !
+
+<br><br>
+ja ne maju a vi'n mae'' di'ljanku w Kii''wi'  = я не маю а вiн має дiлянку в Київi  
+<br>
+JA NE MAJU A VI'N MAE'' MAE''TOK V KIE''WI' = Я НE MAЮ A ВIН MAЄ MAЄТOК В КИЄВI
+
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+ 
+ Obez'jana - e'to zwuchit perspektiwno ! = Oбезьяна - это звучит перспективно !
+ 
+</BODY></HTML>
